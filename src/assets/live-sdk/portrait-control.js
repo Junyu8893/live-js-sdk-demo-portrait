@@ -12,6 +12,7 @@ class PortraitPlayer extends BaseStore {
     this.resolutionWidth = options.resolutionWidth;
     this.resolutionHeight = options.resolutionHeight;
     this.videoSizeTimer = null;
+    this.setVideoSize();
     this.setImgSize(this.warmupImgSelector);
     this.bindPlayerEvent();
     this.listenPlayerEvent();
@@ -21,6 +22,12 @@ class PortraitPlayer extends BaseStore {
     return {
       playing: () => this.trigger(PlayEvents.PLAYING),
       pause: () => this.trigger(PlayEvents.PAUSE),
+      timeupdate: (currentTime) => {
+        this.trigger(PlayEvents.TIME_UPDATE, {
+          currentTime,
+          duration: this.duration,
+        });
+      }
     };
   }
 
@@ -101,6 +108,10 @@ class PortraitPlayer extends BaseStore {
     }
   }
 
+  seek(time) {
+    liveSdk.player.seek(time);
+  }
+
   resume() {
     const playButton = document.querySelector('.plv-live-cover__btn');
     if (playButton && playButton.click) {
@@ -126,6 +137,14 @@ class PortraitPlayer extends BaseStore {
     liveSdk.player.switchLevel(definition);
     this.trigger(PlayEvents.LEVEL_CHANGE, { definition });
     this.trigger(PlayEvents.PLAYING);
+  }
+
+  get duration() {
+    let duration = liveSdk.player.duration || liveSdk.player.config.duration;
+    if (isNaN(duration)) {
+      duration = 0;
+    }
+    return duration;
   }
 
   get playerVideo() {

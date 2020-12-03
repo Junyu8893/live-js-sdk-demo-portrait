@@ -14,4 +14,4 @@ new PolyvPortraitWatch({
   }
 });
 
-new VConsole();
+// new VConsole();

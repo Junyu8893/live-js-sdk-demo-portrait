@@ -1,7 +1,7 @@
 <template>
   <div class="c-playui">
     <!-- 音频切换、线路切换 -->
-    <player-setting :channel="channel" />
+    <player-setting :channel="channel" :playerCtrl="playerCtrl" />
   </div>
 </template>
 
@@ -19,6 +19,7 @@ export default {
 
   props: {
     channel: Object,
+    playerCtrl: null,
   }
 };
 </script>

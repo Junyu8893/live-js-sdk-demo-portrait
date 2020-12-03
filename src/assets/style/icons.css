@@ -43,3 +43,12 @@
 .i-like {
   background-image: url(./imgs/icon-like.png);
 }
+.i-play {
+  background-image: url(./imgs/icon-play.png);
+}
+.i-pause {
+  background-image: url(./imgs/icon-pause.png);
+}
+.i-send-msg {
+  background-image: url(./imgs/icon-send-msg.png);
+}

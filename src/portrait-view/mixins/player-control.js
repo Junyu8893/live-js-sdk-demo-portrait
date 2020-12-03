@@ -11,6 +11,7 @@ const defaultState = {
   streamType: 'client', // 推流方式
   playerStatus: 'stoped', // 视频是否正在播放，playing表示正在播放，stoped表示暂停
   playerMode: 'video', // 播放器播放模式，video表示视频，audio表示音频
+  isPlayed: false, // 是否已播放过视频
   // ----- 清晰度 ----- //
   multirateEnabled: 'N', // 多码率开关
   definitions: [], // 多码率列表
@@ -33,12 +34,6 @@ export default {
       clickCount: 0,
       clickTimer: null,
       playerCtrl: null,
-    };
-  },
-
-  provide() {
-    return {
-      portrait: this
     };
   },
 

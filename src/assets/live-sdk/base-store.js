@@ -3,7 +3,10 @@ import PlayEvents from './player-evt';
 import { bus, UPDATE_PLAYER_STATE } from '../utils/event-bus';
 
 const eventObj = {
-  [PlayEvents.PLAYING]: () => bus.$emit(UPDATE_PLAYER_STATE, 'playerStatus', 'playing'),
+  [PlayEvents.PLAYING]: () => {
+    bus.$emit(UPDATE_PLAYER_STATE, 'playerStatus', 'playing');
+    bus.$emit(UPDATE_PLAYER_STATE, 'isPlayed', true);
+  },
   [PlayEvents.PAUSE]: () => bus.$emit(UPDATE_PLAYER_STATE, 'playerStatus', 'stoped'),
   [PlayEvents.PLAY_FAILE]: () => bus.$emit(UPDATE_PLAYER_STATE, 'playerStatus', 'stoped'),
   [PlayEvents.MODE_CHANGE]: ({ mode }) => bus.$emit(UPDATE_PLAYER_STATE, 'playerMode', mode),

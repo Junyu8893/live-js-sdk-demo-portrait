@@ -26,7 +26,9 @@
           <!-- 滑动公告 -->
           <bulletin-slide />
           <!-- 聊天室 -->
-          <chat :channel="channelDetail" />
+          <chat
+            :playerCtrl="playerCtrl"
+            :channel="channelDetail" />
           <!-- 打赏 -->
           <donate
             v-if="donateGoodEnabled"
@@ -36,7 +38,7 @@
           <!-- 商品列表 -->
           <product-list v-if="productEnabled" />
           <!-- 播放器控制器 -->
-          <player-ui :channel="channelDetail" />
+          <player-ui :channel="channelDetail" :playerCtrl="playerCtrl" />
         </swiper-page>
       </swiper-slide>
 

@@ -18,6 +18,10 @@ export default {
       return this.playerState || this.portrait?.playerState || {};
     },
 
+    portraitData() {
+      return this.portraitState || this.portrait.portraitState || {};
+    },
+
     liveStatus() { return this.playerData?.liveStatus; },
     playerMode() { return this.playerData?.playerMode; },
     lines() { return this.playerData?.lines; },
@@ -28,6 +32,8 @@ export default {
     currentDefinition() { return this.playerData?.currentDefinition; },
     playerStatus() { return this.playerData?.playerStatus; },
     streamType() { return this.playerData?.streamType; },
+    isPlayed() { return this.playerData?.isPlayed; },
+    closedRoom() { return this.portraitData.closedRoom; },
 
     // 是否处于回放中
     isPlaybacking() {
@@ -142,6 +148,75 @@ export default {
         }
       }
       return false;
+    },
+
+    // 点赞是否显示
+    likeVisible() {
+      return !this.isPlaybacking;
+    },
+
+    /**
+     * 进度条是否显示
+     * 1. 回放中
+     * 2. 正片已开始播放
+     */
+    progressBarVisible() {
+      const rule1 = this.isPlaybacking;
+      const rule2 = this.isPlayed;
+      return rule1 && rule2;
+    },
+
+    /**
+     * 进度条是否占据一整行
+     * 判断规则：底部左侧有按钮则占据一整行
+     * 1. 回放发送消息按钮显示了
+     * 2. 回放列表或章节按钮显示了
+     */
+    progressBarIsBlock() {
+      return this.leftBottomHasSomething;
+    },
+
+    /**
+     * 回放下的发送消息按钮是否显示
+     * 1. 回放中
+     * 2. 聊天未被关闭
+     */
+    sendMsgBtnVisible() {
+      const rule1 = this.isPlaybacking;
+      const rule2 = !this.closedRoom;
+      return rule1 && rule2;
+    },
+
+    /**
+     * 聊天室列表的样式
+     * 1. 非回放下：46px
+     * 2. 回放+进度条显示+进度条block显示：85px
+     * 3. 回放+进度条显示+进度条inline显示：46px
+     */
+    chatListStyle() {
+      const style = {
+        bottom: '62px',
+      };
+      if (this.isPlaybacking) {
+        if (this.progressBarVisible && this.progressBarIsBlock) {
+          // 进度条显示且占据一整行
+          style.bottom = '100px';
+        } else if (this.progressBarVisible && !this.progressBarIsBlock) {
+          // 进度条显示且不占据一整行
+          style.bottom = '62px';
+        } else if (!this.progressBarVisible && !this.leftBottomHasSomething) {
+          // 进度条不显示且左下角没有按钮
+          style.bottom = '16px';
+        }
+      }
+      return style;
+    },
+
+    /**
+     * 左下角是否有按钮显示
+     */
+    leftBottomHasSomething() {
+      return this.sendMsgBtnVisible;
     }
   },
 

@@ -12,11 +12,6 @@ export default {
   install: () => {
     // 窗口尺寸改变
     window.addEventListener('resize', (e) => {
-      // 旋转角度为正负90度，提示竖屏观看
-      if (Math.abs(window.orientation) === 90) {
-        alert('请使用竖屏观看');
-      }
-
       /**
        * 软键盘事件
        * 以140高度差为界限，判断是否为软键盘展开或收起事件

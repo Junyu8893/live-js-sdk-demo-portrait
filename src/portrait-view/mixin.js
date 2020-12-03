@@ -15,7 +15,16 @@ export default {
             this.handleSwiperChange();
           }
         }
-      }
+      },
+      portraitState: {
+        closedRoom: false,
+      },
+    };
+  },
+
+  provide() {
+    return {
+      portrait: this
     };
   },
 
@@ -28,12 +37,20 @@ export default {
       });
       // 监听直播流状态改变事件
       liveSdk.on(PolyvLiveSdk.EVENTS.STREAM_UPDATE, (event, status) => {
+        if (this.isPlaybacking) { return; }
         this.channelDetail.watchStatus = status === 'live' ? 'live' : 'end';
         this.playerState.liveStatus = this.channelDetail.watchStatus;
         liveSdk.reloadPlayer();
       });
       // 监听商品库事件
       liveSdk.on(PolyvLiveSdk.EVENTS.PRODUCT_MESSAGE, this.handleProductSocket);
+      // 监听聊天室开关事件
+      liveSdk.on(PolyvLiveSdk.EVENTS.CLOSE_ROOM, this.handleCloseRoom);
+    },
+
+    // 处理聊天室开关事件
+    handleCloseRoom(event, data) {
+      this.$set(this.portraitState, 'closedRoom', data?.value?.closed);
     },
 
     // 获取打赏信息
