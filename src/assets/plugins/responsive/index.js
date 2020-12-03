@@ -1,3 +1,4 @@
+// @file 监听窗口尺寸改变事件，判断是否为输入法打开或收起
 import {
   bus,
   WINDOW_RESIZE,
@@ -10,8 +11,7 @@ let windowInnerHeight = window.innerHeight;
 export default {
   install: () => {
     // 窗口尺寸改变
-    const resizeEvent = 'onorientationchange' in window ? 'orientationchange' : 'resize';
-    window.addEventListener(resizeEvent, (e) => {
+    window.addEventListener('resize', (e) => {
       // 旋转角度为正负90度，提示竖屏观看
       if (Math.abs(window.orientation) === 90) {
         alert('请使用竖屏观看');

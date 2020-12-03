@@ -11,34 +11,48 @@
       <donate-tips />
       <!-- 聊天室 -->
       <chat-list :channel="channel" />
-      <!-- 点赞 -->
-      <like
-        :seatType="!playerMenuBarVisible ? 'deviation' : ''"
-        :channel="channel" />
 
       <div
         :class="[
           'c-chat__control',
-          !playerMenuBarVisible ? 'c-chat__control--nomenu' : ''
         ]">
         <!-- 输入提示 -->
         <input-tips />
-        <!-- 购物车入口 -->
-        <div
-          v-if="productEnabled"
-          data-shopping-btn
-          class="c-chat__control__btn g-icon i-shop-car"
-          @click="showProductList"></div>
-        <!-- 打赏入口 -->
-        <div
-          v-if="donateGoodEnabled"
-          class="c-chat__control__btn g-icon i-donate"
-          @click="showDonate"></div>
-        <!-- 更多 -->
-        <div
-          v-if="playerMenuBarVisible"
-          class="c-chat__control__btn g-icon i-more"
-          @click="showPlayerSetting"></div>
+        <!-- 右侧按钮 -->
+        <div class="c-chat__control__right">
+          <!-- 购物车入口 -->
+          <div
+            v-if="productEnabled"
+            class="c-chat__control__btn">
+            <div
+              data-shopping-btn
+              class="c-chat__control__btn__inner g-icon i-shop-car"
+              @click="showProductList"></div>
+          </div>
+          <!-- 打赏入口 -->
+          <div
+            v-if="donateGoodEnabled"
+            class="c-chat__control__btn">
+            <div
+              data-shopping-btn
+              class="c-chat__control__btn__inner g-icon i-donate"
+              @click="showDonate"></div>
+          </div>
+          <!-- 更多&点赞 -->
+          <div
+            class="c-chat__control__btn">
+            <!-- 点赞 -->
+            <like
+              class="c-chat__control__btn__inner--like"
+              :seatType="!playerMenuBarVisible ? 'deviation' : ''"
+              :channel="channel" />
+            <!-- 更多 -->
+            <div
+              v-if="playerMenuBarVisible"
+              class="c-chat__control__btn__inner c-chat__control__btn__inner--more g-icon i-more"
+              @click="showPlayerSetting"></div>
+          </div>
+        </div>
       </div>
 
       <!-- 输入留言 -->
@@ -55,7 +69,6 @@ import {
   PLAYER_SETTING_VISIBLE,
 } from '../../assets/utils/event-bus';
 import channelBaseMixin from '../../assets/mixins/channel-base';
-import playerCommonMixin from '../../assets/mixins/player-common';
 import InputTips from '../Form/InputTips';
 import DonateTips from '../Donate/DonateTips';
 import Welcome from '../Welcome/Welcome';
@@ -64,7 +77,7 @@ import MsgInput from '../Form/MsgInput';
 import Like from '../Like/Like';
 
 export default {
-  mixins: [channelBaseMixin, playerCommonMixin],
+  mixins: [channelBaseMixin],
 
   components: {
     InputTips,
@@ -107,17 +120,25 @@ export default {
   right: 16px;
   bottom: 16px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
 }
-.c-chat__control.c-chat__control--nomenu {
-  right: 64px;
+.c-chat__control__right {
+  margin-left: auto;
+  display: flex;
+  align-items: flex-end;
+  z-index: 11;
 }
 .c-chat__control .c-input-tips {
   margin-right: auto;
 }
 .c-chat__control__btn {
+  margin-left: 16px;
+}
+.c-chat__control__btn__inner {
   width: 32px;
   height: 32px;
-  margin-left: 16px;
+}
+.c-chat__control__btn__inner--like + .c-chat__control__btn__inner--more {
+  margin-top: 16px;
 }
 </style>

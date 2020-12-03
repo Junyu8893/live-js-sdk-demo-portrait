@@ -57,7 +57,6 @@ export default {
     liveSdk.off(PolyvLiveSdk.EVENTS.REWARD, this.handleOtherMsg);
     liveSdk.off(PolyvLiveSdk.EVENTS.REMOVE_CONTENT, this.handleRemoveMsg);
     liveSdk.off(PolyvLiveSdk.EVENTS.REMOVE_HISTORY, this.handleRemoveHistory);
-    liveSdk.off(PolyvLiveSdk.EVENTS.CLOSEROOM, this.handleCloseRoom);
 
     bus.$off(SELF_SPEAK, this.handleSelfSpeak);
     clearInterval(this.queueHandlerTimer);

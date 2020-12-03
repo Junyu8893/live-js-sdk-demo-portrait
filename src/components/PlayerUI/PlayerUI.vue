@@ -8,10 +8,10 @@
 <script>
 // 所有有关播放器操作都到PlayerUI处理
 import PlayerSetting from './components/PlayerSetting';
-import playerCommonMixin from '../../assets/mixins/player-common';
+import channelBaseMixin from '../../assets/mixins/channel-base';
 
 export default {
-  mixins: [playerCommonMixin],
+  mixins: [channelBaseMixin],
 
   components: {
     PlayerSetting,

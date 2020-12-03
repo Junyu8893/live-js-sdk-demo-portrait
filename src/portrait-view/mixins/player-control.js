@@ -3,9 +3,11 @@ import { bus, PLAYER_CLICK, UPDATE_PLAYER_STATE } from '../../assets/utils/event
 import PortraitPlayer from '../../assets/live-sdk/portrait-control';
 import channelApi from '../../assets/api/channel';
 import { liveSdk } from '../../assets/live-sdk/live-sdk';
+import { config } from '../../assets/utils/config';
 
+// 播放器默认数据
 const defaultState = {
-  liveStatus: '', // 直播状态
+  liveStatus: '', // 直播状态, live-直播中, end-无直播
   streamType: 'client', // 推流方式
   playerStatus: 'stoped', // 视频是否正在播放，playing表示正在播放，stoped表示暂停
   playerMode: 'video', // 播放器播放模式，video表示视频，audio表示音频
@@ -26,6 +28,7 @@ export default {
       playerState: {
         ...defaultState
       },
+      vid: null,
       // 点击次数
       clickCount: 0,
       clickTimer: null,
@@ -78,7 +81,7 @@ export default {
       const advertHref = detailData.advertHref;
       this.playerState.advertHref = advertHref;
       // 直播状态
-      this.playerState.liveStatus = this.channelDetail.watchStatus;
+      this.playerState.liveStatus = this.channelDetail.watchStatus === 'live' ? 'live' : 'end';
       // 推流类型
       this.playerState.streamType = detailData.streamType;
 
@@ -144,6 +147,7 @@ export default {
   },
 
   mounted() {
+    this.vid = config.vid;
     bus.$on(PLAYER_CLICK, this.handlePlayerClick);
     bus.$on(UPDATE_PLAYER_STATE, this.handlePlayerStateChange);
   },

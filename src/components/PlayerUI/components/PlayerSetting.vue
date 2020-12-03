@@ -43,11 +43,11 @@
 <script>
 import { PLAYER_SETTING_VISIBLE, bus } from '../../../assets/utils/event-bus';
 import Popper from '../../Popper/Popper';
-import playerCommonMixin from '../../../assets/mixins/player-common';
+import channelBaseMixin from '../../../assets/mixins/channel-base';
 import SettingSelect from './setting-select';
 
 export default {
-  mixins: [playerCommonMixin],
+  mixins: [channelBaseMixin],
 
   data() {
     return {
@@ -88,11 +88,11 @@ export default {
     },
     handleChangeMultirate(definition) {
       if (definition === this.currentDefinition) { return; }
-      this.playerCtrl.changeDefinition(definition);
+      this.getPlayerCtrl().changeDefinition(definition);
     },
     handleChangeMode() {
       const mode = this.playerMode === 'video' ? 'audio' : 'video';
-      this.playerCtrl.setPlayerMode(mode);
+      this.getPlayerCtrl().setPlayerMode(mode);
       this.visible = false;
     },
   },

@@ -11,11 +11,63 @@ class PortraitPlayer extends BaseStore {
     this.streamType = options.streamType;
     this.resolutionWidth = options.resolutionWidth;
     this.resolutionHeight = options.resolutionHeight;
+    this.videoSizeTimer = null;
     this.setImgSize(this.warmupImgSelector);
-    // 设置video位置
-    if (this.streamType === 'client' && this.liveStatus === 'live') {
-      this.setVideoSize();
+    this.bindPlayerEvent();
+    this.listenPlayerEvent();
+  }
+
+  getEventHandle() {
+    return {
+      playing: () => this.trigger(PlayEvents.PLAYING),
+      pause: () => this.trigger(PlayEvents.PAUSE),
+    };
+  }
+
+  // 监听播放器事件，同步到内置事件中
+  listenPlayerEvent() {
+    const events = this.getEventHandle();
+    for (const key in events) {
+      liveSdk.player.on(key, events[key]);
     }
+  }
+
+  // 绑定内部事件
+  bindPlayerEvent() {
+    const actions = {
+      [PlayEvents.PLAYING]: () => {
+        this.refreshVideoSize();
+      },
+    };
+    for (const event in actions) {
+      this.on(event, actions[event].bind(this));
+    }
+  }
+
+  // 读取video里面的尺寸并重新计算位置
+  refreshVideoSize() {
+    clearTimeout(this.videoSizeTimer);
+    this.videoSizeTimer = null;
+    this.videoSizeTimer = setTimeout(() => {
+      const playerVideo = this.playerVideo;
+      if (playerVideo) {
+        const width = playerVideo.videoWidth;
+        const height = playerVideo.videoHeight;
+        const size = `${width}*${height}`;
+        if (size === this.preVideoSize) { return; }
+
+        if (width && height && size !== this.preVideoSize) {
+          this.resolutionWidth = width;
+          this.resolutionHeight = height;
+          this.preVideoSize = size;
+          this.setVideoSize();
+          clearTimeout(this.videoSizeTimer);
+          this.videoSizeTimer = null;
+        } else {
+          this.refreshVideoSize();
+        }
+      }
+    }, 400);
   }
 
   /**
@@ -74,6 +126,10 @@ class PortraitPlayer extends BaseStore {
     liveSdk.player.switchLevel(definition);
     this.trigger(PlayEvents.LEVEL_CHANGE, { definition });
     this.trigger(PlayEvents.PLAYING);
+  }
+
+  get playerVideo() {
+    return document.querySelector('#player-container video');
   }
 
   // 是否正在显示片头广告图片&视频

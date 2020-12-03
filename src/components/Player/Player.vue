@@ -24,14 +24,14 @@
 </template>
 
 <script>
-import playerCommonMixin from '../../assets/mixins/player-common';
+import channelBaseMixin from '../../assets/mixins/channel-base';
 import { liveSdk } from '../../assets/live-sdk/live-sdk';
 import NotLive from './not-live';
 import AudioPanel from './audio-panel';
 import VideoComputed from './video-computed';
 
 export default {
-  mixins: [playerCommonMixin],
+  mixins: [channelBaseMixin],
 
   components: {
     NotLive,
@@ -41,13 +41,18 @@ export default {
 
   methods: {
     createPlayer() {
-      liveSdk.setupPlayer({
+      const playerOptions = {
         el: '#player-container',
         type: 'live',
         autoplay: true,
         controller: false,
         useH5Page: true,
-      });
+      };
+      if (this.portrait.vid) {
+        playerOptions.type = 'vod';
+        playerOptions.vid = this.portrait.vid;
+      }
+      liveSdk.setupPlayer(playerOptions);
       liveSdk.player.on('initOver', () => {
         this.$emit('player-init');
       });
@@ -154,5 +159,9 @@ export default {
 }
 .c-player__container .plv-live-cutOff {
   display: none;
+}
+/* 隐藏摄像头占位图 */
+.c-player__container .pv-ppt-normal {
+  background-image: none !important;
 }
 </style>
