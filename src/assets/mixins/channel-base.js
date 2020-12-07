@@ -22,6 +22,87 @@ export default {
       return this.portraitState || this.portrait.portraitState || {};
     },
 
+    documentSwitch() { return this.portraitData.documentSwitch; },
+    documentProportion() { return this.portraitData.documentProportion; },
+
+    channelScene() {
+      return this.channelData?.scene;
+    },
+
+    isPPT() {
+      return this.channelScene === 'ppt';
+    },
+
+    /**
+     * 是否显示PPT文档
+     * 1. 三分屏频道
+     * 2. 正在直播 || 回放中
+     * 3. 文档开关已打开
+     */
+    documentVisible() {
+      const rule1 = this.isPPT;
+      const rule2 = this.isLiveing || this.isPlaybacking;
+      const rule3 = this.documentSwitch;
+      return rule1 && rule2 && rule3;
+    },
+
+    /**
+     * 是否显示显示/隐藏文档开关
+     * 1. 三分屏频道
+     * 2. 正在直播 || 回放中
+     */
+    documentSwitchVisible() {
+      const rule1 = this.isPPT;
+      const rule2 = this.isLiveing || this.isPlaybacking;
+      return rule1 && rule2;
+    },
+
+    /**
+     * 文档容器高度
+     */
+    docWrapHeight() {
+      const clientWidth = document.documentElement.clientWidth;
+      // 最小高度为9:16
+      const minHeight = clientWidth * (9 / 16);
+      // 最大高度为3:4
+      const maxHeight = clientWidth * 0.75;
+      // 文档不可见，高度设为0
+      if (!this.documentVisible) { return 0; }
+      if (!this.documentProportion) { return minHeight; }
+      const height = clientWidth / this.documentProportion;
+      if (height >= maxHeight) { return maxHeight; }
+      if (height < minHeight) { return minHeight; }
+      return height;
+    },
+
+    portraitHeight() {
+      return this?.portrait?.clientHeight || 0;
+    },
+
+    /**
+     * 频道信息位置
+     * 0 - 公告介绍屏
+     * 1 - 聊天室屏
+     * --------------
+     * 第0屏：
+     * 1. 三分屏频道
+     * 2. 正在直播 || 回放中
+     */
+    channelInfoSeat() {
+      const rule1 = this.isPPT;
+      const rule2 = this.isLiveing || this.isPlaybacking;
+      return (rule1 && rule2) ? 0 : 1;
+    },
+
+    // 是否正在直播中
+    isLiveing() {
+      return this.liveStatus === 'live';
+    },
+
+    onlineUserNumber() {
+      return this?.portraitData?.onlineUserNumber || 0;
+    },
+
     liveStatus() { return this.playerData?.liveStatus; },
     playerMode() { return this.playerData?.playerMode; },
     lines() { return this.playerData?.lines; },
@@ -37,7 +118,7 @@ export default {
 
     // 是否处于回放中
     isPlaybacking() {
-      return !!this.portrait?.vid;
+      return !!this.portrait?.vid || !!this.vid;
     },
 
     /**
@@ -210,6 +291,17 @@ export default {
         }
       }
       return style;
+    },
+
+    /**
+     * 章节是否显示
+     * 1. 三分屏
+     * 2. 回放中
+     */
+    chapterVisible() {
+      const rule1 = this.isPPT;
+      const rule2 = this.isPlaybacking;
+      return rule1 && rule2;
     },
 
     /**

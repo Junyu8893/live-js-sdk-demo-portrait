@@ -92,6 +92,26 @@ export const videoSizeComputed = (screenData, videoData) => {
   return sizeData;
 };
 
+/**
+ * video标签尺寸位置计算 - 三分屏
+ * @param {Object} screenData 屏幕尺寸
+ * @param {Object} videoData 视频流尺寸
+ */
+export const pptVideoSizeComputed = (screenData, videoData) => {
+  const { sw = 0, sh = 0 } = screenData;
+  const { vw = 0, vh = 0 } = videoData;
+  if (!sw || !sh || !vw || !vh) return null;
+
+  // 视频宽度占满的等比高度
+  const _vh = (vh / vw) * sw;
+  return {
+    width: sw,
+    height: _vh,
+    top: 0,
+    left: 0
+  };
+};
+
 export const imgSizeComputed = (screenData) => {
   const { sw = 0, sh = 0 } = screenData;
   if (!sw || !sh) return null;

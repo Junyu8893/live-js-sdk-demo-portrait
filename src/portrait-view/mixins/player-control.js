@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { checkDomClick } from '../../assets/utils/player-utils';
 import { bus, PLAYER_CLICK, UPDATE_PLAYER_STATE } from '../../assets/utils/event-bus';
 import PortraitPlayer from '../../assets/live-sdk/portrait-control';
@@ -35,6 +36,23 @@ export default {
       clickTimer: null,
       playerCtrl: null,
     };
+  },
+
+  watch: {
+    documentVisible: {
+      handler(visible) {
+        if (visible) {
+          this.$nextTick(() => {
+            if (liveSdk?.player?.player?.ppt?.resize) {
+              liveSdk.player.player.ppt.resize();
+            }
+          });
+        }
+        Vue.nextTick(() => {
+          this.playerCtrl && this.playerCtrl.setVideoSize();
+        });
+      }
+    }
   },
 
   methods: {
@@ -81,11 +99,18 @@ export default {
       this.playerState.streamType = detailData.streamType;
 
       this.playerCtrl = new PortraitPlayer({
+        portrait: this,
         liveStatus: this.channelDetail.watchStatus,
         streamType: detailData.streamType,
         resolutionWidth: detailData.resolutionWidth,
         resolutionHeight: detailData.resolutionHeight
       });
+      if (liveSdk?.player?.player?.ppt) {
+        this.portraitState.documentProportion = liveSdk.player.player.ppt.prop;
+        liveSdk.player.player.ppt.on('propChange', (prop) => {
+          this.$set(this.portraitState, 'documentProportion', prop);
+        });
+      }
     },
 
     openUrl(url) {

@@ -39,6 +39,15 @@
             @click.native="handleClickSendMsg" />
         </template>
 
+        <!-- 章节开关 -->
+        <div
+          v-if="chapterVisible"
+          class="c-chat__control__btn">
+          <div
+            class="c-chat__control__btn__inner g-icon i-playback"
+            @click="showChapterList"></div>
+        </div>
+
         <!-- 右侧按钮 -->
         <div class="c-chat__control__right">
           <!-- 购物车入口 -->
@@ -91,6 +100,7 @@ import {
   SHOPPING_VISIBLE,
   PLAYER_SETTING_VISIBLE,
   CHAT_INPUT_VISIBLE,
+  CHAPTER_VISIBLE,
 } from '../../assets/utils/event-bus';
 import channelBaseMixin from '../../assets/mixins/channel-base';
 import InputTips from '../Form/InputTips';
@@ -131,6 +141,9 @@ export default {
     },
     showPlayerSetting() {
       bus.$emit(PLAYER_SETTING_VISIBLE, true);
+    },
+    showChapterList() {
+      bus.$emit(CHAPTER_VISIBLE, true);
     },
   }
 };

@@ -1,5 +1,14 @@
 <template>
-  <div class="c-player">
+  <div
+    :style="playerWrapStyle"
+    class="c-player">
+    <!-- 文档容器 -->
+    <div
+      v-if="isPPT"
+      v-show="documentVisible"
+      class="c-player__doc"
+      id="doc-container"
+      :style="docWrapStyle"></div>
     <!-- 播放器容器 -->
     <div
       id="player-container"
@@ -48,6 +57,9 @@ export default {
         controller: false,
         useH5Page: true,
       };
+      if (this.isPPT) {
+        playerOptions.pptEl = '#doc-container';
+      }
       if (this.portrait.vid) {
         playerOptions.type = 'vod';
         playerOptions.vid = this.portrait.vid;
@@ -56,6 +68,34 @@ export default {
       liveSdk.player.on('initOver', () => {
         this.$emit('player-init');
       });
+    }
+  },
+
+  computed: {
+    playerWrapStyle() {
+      const style = {};
+      if (this.documentVisible) {
+        style.paddingTop = `${this.docWrapHeight}px`;
+      }
+      return style;
+    },
+    docWrapStyle() {
+      return {
+        height: `${this.docWrapHeight}px`
+      };
+    }
+  },
+
+  watch: {
+    docWrapHeight: {
+      immediate: true,
+      handler: function() {
+        this.$nextTick(() => {
+          if (liveSdk?.player?.player?.ppt?.resize) {
+            liveSdk.player.player.ppt.resize();
+          }
+        });
+      }
     }
   },
 
@@ -69,9 +109,10 @@ export default {
 .c-player {
   position: absolute;
   width: 100%;
-  height: 100%;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 9;
 }
 .c-player__container {
@@ -126,6 +167,13 @@ export default {
   flex-direction: column;
   font-size: 14px;
   color: #fff;
+}
+
+.c-player__doc {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 </style>
 

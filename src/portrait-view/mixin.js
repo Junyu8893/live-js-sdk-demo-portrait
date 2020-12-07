@@ -5,6 +5,7 @@ import { bus, SWIPER_CHANGE } from '../assets/utils/event-bus';
 export default {
   data() {
     return {
+      clientHeight: document.documentElement.clientHeight,
       // 轮播组件配置
       swiperOptions: {
         autoplay: false,
@@ -17,7 +18,11 @@ export default {
         }
       },
       portraitState: {
-        closedRoom: false,
+        chapterList: [],
+        documentSwitch: true, // 文档开关
+        documentProportion: 1, // 文档比例尺寸
+        onlineUserNumber: 0, // 聊天室在线人数
+        closedRoom: false, // 聊天室是否已关闭
       },
     };
   },
@@ -26,6 +31,18 @@ export default {
     return {
       portrait: this
     };
+  },
+
+  computed: {
+    watchStyle() {
+      const style = {
+        height: `${this.clientHeight}px`
+      };
+      if (this.isPPT) {
+        style.paddingTop = `${this.docWrapHeight}px`;
+      }
+      return style;
+    }
   },
 
   methods: {
@@ -46,6 +63,8 @@ export default {
       liveSdk.on(PolyvLiveSdk.EVENTS.PRODUCT_MESSAGE, this.handleProductSocket);
       // 监听聊天室开关事件
       liveSdk.on(PolyvLiveSdk.EVENTS.CLOSE_ROOM, this.handleCloseRoom);
+      // 监听章节初始化事件
+      liveSdk.on(PolyvLiveSdk.EVENTS.PLAYBACK_INIT, this.handlePlaybackInit);
     },
 
     // 处理聊天室开关事件
@@ -76,6 +95,14 @@ export default {
         channelMenus.push(data.content);
       }
       this.$set(this.channelDetail, 'channelMenus', channelMenus);
+    },
+
+    // 处理回放章节初始化完成
+    handlePlaybackInit(event, data) {
+      liveSdk.getChapterLists(data.fileId, data.type).then((list) => {
+        console.log(list);
+        this.$set(this.portraitState, 'chapterList', list);
+      });
     }
   }
 };

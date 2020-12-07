@@ -1,5 +1,5 @@
 import { liveSdk } from './live-sdk';
-import { imgSizeComputed, videoSizeComputed } from '../utils/player-utils';
+import { imgSizeComputed, videoSizeComputed, pptVideoSizeComputed } from '../utils/player-utils';
 import BaseStore from './base-store';
 import PlayEvents from './player-evt';
 import { setStyle } from '../utils/dom';
@@ -7,6 +7,7 @@ import { setStyle } from '../utils/dom';
 class PortraitPlayer extends BaseStore {
   constructor(options = {}) {
     super();
+    this.portrait = options.portrait;
     this.liveStatus = options.liveStatus;
     this.streamType = options.streamType;
     this.resolutionWidth = options.resolutionWidth;
@@ -100,7 +101,12 @@ class PortraitPlayer extends BaseStore {
       vw: this.resolutionWidth,
       vh: this.resolutionHeight
     };
-    const size = videoSizeComputed(screenData, videoData);
+    let size = null;
+    if (this?.portrait?.isPPT && this?.portrait?.portraitState?.documentSwitch) {
+      size = pptVideoSizeComputed(screenData, videoData);
+    } else {
+      size = videoSizeComputed(screenData, videoData);
+    }
     const videoDom = document.querySelector('#player-container .plvideo');
     if (!size || !videoDom) return;
     for (const styleName in size) {
@@ -137,6 +143,24 @@ class PortraitPlayer extends BaseStore {
     liveSdk.player.switchLevel(definition);
     this.trigger(PlayEvents.LEVEL_CHANGE, { definition });
     this.trigger(PlayEvents.PLAYING);
+  }
+
+  getCurrentTime() {
+    return liveSdk.player?.currentTime || 0;
+  }
+
+  // 等待正片播放
+  waitForPositivePlay() {
+    return new Promise((resolve) => {
+      const handleTimeUpdate = function() {
+        const currentTime = this.getCurrentTime();
+        if (currentTime > 0) {
+          resolve();
+          this.off(PlayEvents.TIME_UPDATE, handleTimeUpdate);
+        }
+      };
+      this.on(PlayEvents.TIME_UPDATE, handleTimeUpdate);
+    });
   }
 
   get duration() {
