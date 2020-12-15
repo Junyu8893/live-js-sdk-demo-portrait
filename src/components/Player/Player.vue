@@ -38,6 +38,7 @@ import { liveSdk } from '../../assets/live-sdk/live-sdk';
 import NotLive from './not-live';
 import AudioPanel from './audio-panel';
 import VideoComputed from './video-computed';
+import { config } from '../../assets/utils/config';
 
 export default {
   mixins: [channelBaseMixin],
@@ -63,11 +64,17 @@ export default {
       if (this.portrait.vid) {
         playerOptions.type = 'vod';
         playerOptions.vid = this.portrait.vid;
+        if (config.vodType) {
+          playerOptions.vodType = config.vodType;
+        }
       }
       liveSdk.setupPlayer(playerOptions);
       liveSdk.player.on('initOver', () => {
         this.$emit('player-init');
       });
+      window.s2j_onPlayerInitOver = () => {
+        this.$emit('player-init');
+      };
     }
   },
 
@@ -180,9 +187,13 @@ export default {
 <!-- 播放器内置样式覆盖 -->
 <style>
 /* 默认背景覆盖 */
+.c-player__container,
 .c-player__container .plwrap {
   background: url('./imgs/player-bg.png');
   background-size: cover;
+}
+.c-player__container .pv-ppt-layout {
+  background-color: transparent;
 }
 /* 隐藏直播播放器自带暂停按钮 */
 .c-player__container .plv-live-cover__btn {
@@ -199,11 +210,13 @@ export default {
   background-position: center center !important;
 }
 /* 直播暂停隐藏 */
+.c-player__container #playbutton,
 .c-player__container .plv-live-pause {
-  display: none;
+  display: none !important;
 }
 .c-player__container video {
   object-fit: cover !important;
+  height: 100% !important;
 }
 .c-player__container .plv-live-cutOff {
   display: none;

@@ -94,6 +94,7 @@ Vue.use(PortraitView, {
 | appSecret | 保利威后台的 appSecret | string | 是 |
 | channelId | 频道号 | string | 是 |
 | vid | 回放id | string | 否 |
+| vodType | 回放类型 | string | 否 |
 | user | 用户信息 | Object | 是 |
 | user.userId | 用户id | string | 是 |
 | user.userName | 用户昵称 | string | 是 |

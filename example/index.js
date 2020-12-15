@@ -9,7 +9,8 @@ new PolyvPortraitWatch({
   // channelId: '1955567',
   //  vid: 'd20ca4cc3c6b4062b99630d4751719e8_d',
   channelId: '1778938',
-  // vid: 'd20ca4cc3cb48d872fa4324fa7431480_d',
+  vid: 'd20ca4cc3cb48d872fa4324fa7431480_d',
+  vodType: 'vod',
   user: {
     userId: '123456',
     userName: 'polyv-test',

@@ -14,6 +14,8 @@ export const config = {
   },
   // 回放vid
   vid: '',
+  // 播放回放类型
+  vodType: '',
   // 默认头像
   defaultAvatar: '//livestatic.videocc.net/assets/wimages/missing_face.png'
 };

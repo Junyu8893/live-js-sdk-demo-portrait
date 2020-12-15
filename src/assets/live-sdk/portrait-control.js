@@ -17,6 +17,7 @@ class PortraitPlayer extends BaseStore {
     this.setImgSize(this.warmupImgSelector);
     this.bindPlayerEvent();
     this.listenPlayerEvent();
+    this.bindVideoEvent();
   }
 
   getEventHandle() {
@@ -30,6 +31,17 @@ class PortraitPlayer extends BaseStore {
         });
       }
     };
+  }
+
+  bindVideoEvent() {
+    if (this.playerVideo) {
+      this.playerVideo.addEventListener('timeupdate', (currentTime) => {
+        this.trigger(PlayEvents.TIME_UPDATE, {
+          currentTime: liveSdk.player.currentTime,
+          duration: this.duration,
+        });
+      });
+    }
   }
 
   // 监听播放器事件，同步到内置事件中
@@ -107,7 +119,7 @@ class PortraitPlayer extends BaseStore {
     } else {
       size = videoSizeComputed(screenData, videoData);
     }
-    const videoDom = document.querySelector('#player-container .plvideo');
+    const videoDom = document.querySelector('#player-container .plvideo') || document.querySelector('#player-container #plv_container');
     if (!size || !videoDom) return;
     for (const styleName in size) {
       setStyle(videoDom, styleName, `${size[styleName]}px`);
