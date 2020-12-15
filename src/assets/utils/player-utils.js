@@ -5,13 +5,14 @@
  */
 export const checkDomClick = (dom, event) => {
   if (!dom || !event) return;
-  const clickX = event.x;
-  const clickY = event.y;
+  const clickX = event.clientX;
+  const clickY = event.clientY;
 
-  const startX = dom.offsetLeft;
-  const endX = startX + dom.offsetWidth;
-  const startY = dom.offsetTop;
-  const endY = startY + dom.offsetHeight;
+  const rect = dom.getBoundingClientRect();
+  const startX = rect.x;
+  const endX = startX + rect.width;
+  const startY = rect.y;
+  const endY = startY + rect.height;
 
   return (clickX >= startX && clickX <= endX) &&
     (clickY >= startY && clickY <= endY);

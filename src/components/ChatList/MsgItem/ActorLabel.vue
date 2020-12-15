@@ -78,5 +78,6 @@ export default {
   display: inline-block;
   transform: scale(.75, .75);
   word-break: keep-all;
+  flex-shrink: 0;
 }
 </style>

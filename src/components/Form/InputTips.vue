@@ -17,7 +17,7 @@ export default {
 
   computed: {
     tipsText() {
-      return this.closedRoom ? '聊天室暂时关闭' : '跟大家聊点什么吧~';
+      return this.closedRoom ? '聊天室暂时关闭' : '来聊点什么吧~';
     }
   },
 };
@@ -25,7 +25,9 @@ export default {
 
 <style>
 .c-input-tips {
-  width: 165px;
+  flex: 1;
+  margin-right: 16px;
+  max-width: 165px;
   height: 32px;
   border-radius: 16px;
   background: rgba(0, 0, 0, .4);

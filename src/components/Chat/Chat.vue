@@ -177,9 +177,6 @@ export default {
   align-items: flex-end;
   z-index: 11;
 }
-.c-chat__control .c-input-tips {
-  margin-right: auto;
-}
 .c-chat__control__btn + .c-chat__control__btn {
   margin-left: 16px;
 }

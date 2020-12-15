@@ -65,6 +65,8 @@ export default {
       liveSdk.on(PolyvLiveSdk.EVENTS.CLOSE_ROOM, this.handleCloseRoom);
       // 监听章节初始化事件
       liveSdk.on(PolyvLiveSdk.EVENTS.PLAYBACK_INIT, this.handlePlaybackInit);
+      // 监听用户被踢出事件
+      liveSdk.on(PolyvLiveSdk.EVENTS.BAN_USER_ROOM, this.handleBanUserRoom);
     },
 
     // 处理聊天室开关事件
@@ -100,9 +102,14 @@ export default {
     // 处理回放章节初始化完成
     handlePlaybackInit(event, data) {
       liveSdk.getChapterLists(data.fileId, data.type).then((list) => {
-        console.log(list);
         this.$set(this.portraitState, 'chapterList', list);
       });
+    },
+
+    // 处理当前用户被踢出房间
+    handleBanUserRoom(evt) {
+      console.info('当前用户被踢出了房间', evt);
+      // TODO ....
     }
   }
 };

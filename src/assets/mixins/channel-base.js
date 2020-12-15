@@ -121,6 +121,10 @@ export default {
       return !!this.portrait?.vid || !!this.vid;
     },
 
+    playerInited() {
+      return this.getPlayerCtrl();
+    },
+
     /**
      * 是否有音视频状态(或)
      * 1. 有直播
@@ -144,7 +148,8 @@ export default {
       const rule1 = this.playerStatus === 'stoped';
       const rule2 = !this.notLiveVisible;
       const rule3 = this.hasVideo;
-      return rule1 && rule2 && rule3;
+      const rule4 = this.playerInited;
+      return rule1 && rule2 && rule3 && rule4;
     },
 
     /**
@@ -157,7 +162,8 @@ export default {
       const rule1 = this.liveStatus !== 'live';
       const rule2 = this.warmupType === '';
       const rule3 = !this.isPlaybacking;
-      return rule1 && rule2 && rule3;
+      const rule4 = this.playerInited;
+      return rule1 && rule2 && rule3 && rule4;
     },
 
     /**

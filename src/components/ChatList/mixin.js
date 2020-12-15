@@ -105,7 +105,6 @@ export default {
 
     // 处理socket图片消息
     handleImgMsg(event, msg) {
-      msg.content = msg.values && msg.values[0];
       msg.msgSource = msgSource.chatImg;
       msg.hiddenCount = this.waitOtherCount;
       this.waitOtherCount = 0;
@@ -114,7 +113,10 @@ export default {
 
     // 处理socket发言消息
     handleSpeak(event, msg) {
-      if (/error|censor/.test(msg.status) || msg.censorTime) return;
+      if (
+        /error|censor/.test(msg.status) ||
+        msg?.user?.userId === config?.user?.userId
+      ) return;
 
       msg.msgSource = msgSource.speak;
       msg.hiddenCount = this.waitOtherCount;
