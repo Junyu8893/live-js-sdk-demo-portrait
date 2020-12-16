@@ -1,7 +1,10 @@
 <template>
   <div
     :style="playerWrapStyle"
-    class="c-player">
+    class="c-player"
+    :class="{
+      'c-player--living': liveStatus === 'live'
+    }">
     <!-- 文档容器 -->
     <div
       v-if="isPPT"
@@ -14,7 +17,8 @@
       id="player-container"
       :class="[
         'c-player__container',
-        liveStatus === 'live' ? 'c-player__container--live' : ''
+        liveStatus === 'live' ? 'c-player__container--live' : '',
+        playerInited ? '' : 'c-player__container--hide'
       ]"></div>
     <!-- 暂无直播占位 -->
     <not-live v-if="notLiveVisible" />
@@ -126,6 +130,9 @@ export default {
   width: 100%;
   height: 100%;
 }
+.c-player__container--hide {
+  opacity: 0;
+}
 .c-player__button {
   position: absolute;
   top: 50%;
@@ -224,5 +231,17 @@ export default {
 /* 隐藏摄像头占位图 */
 .c-player__container .pv-ppt-normal {
   background-image: none !important;
+}
+.c-player__container .error {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  right: 10px;
+  transform: translateY(-50%);
+  text-align: center;
+  line-height: 30px;
+}
+.c-player--living .plv-live-cover {
+  display: none;
 }
 </style>
