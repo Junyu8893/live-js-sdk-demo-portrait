@@ -89,7 +89,7 @@ export default {
       }
 
       // logo信息
-      this.playerState.logoHref = detailData.logoHref;
+      this.playerState.logoHref = detailData.playerLogoHref;
       // 片头广告
       const advertHref = detailData.advertHref;
       this.playerState.advertHref = advertHref;
