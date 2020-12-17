@@ -12,6 +12,7 @@ const eventObj = {
   [PlayEvents.MODE_CHANGE]: ({ mode }) => bus.$emit(UPDATE_PLAYER_STATE, 'playerMode', mode),
   [PlayEvents.LEVEL_CHANGE]: ({ definition }) => bus.$emit(UPDATE_PLAYER_STATE, 'currentDefinition', definition),
   [PlayEvents.STATUS_CHANGE]: ({ status }) => bus.$emit(UPDATE_PLAYER_STATE, 'liveStatus', status),
+  [PlayEvents.RATE_CHANGE]: ({ rate }) => bus.$emit(UPDATE_PLAYER_STATE, 'currentRate', rate),
 };
 
 class BaseStore extends PubSub {

@@ -17,6 +17,8 @@ const defaultState = {
   multirateEnabled: 'N', // 多码率开关
   definitions: [], // 多码率列表
   currentDefinition: 0, // 当前的码率
+  // ----- 倍速 ----- //
+  currentRate: 1, // 当前倍速
   // ----- 其他 ----- //
   warmupType: '', // 暖场类型，img: 暖场图片，video: 暖场视频
   logoHref: '', // logo跳转连接

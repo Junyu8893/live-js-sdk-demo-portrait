@@ -3,7 +3,8 @@
     :style="playerWrapStyle"
     class="c-player"
     :class="{
-      'c-player--living': liveStatus === 'live'
+      'c-player--living': liveStatus === 'live',
+      'c-player--playbacking': isPlaybacking,
     }">
     <!-- 文档容器 -->
     <div
@@ -241,6 +242,7 @@ export default {
   text-align: center;
   line-height: 30px;
 }
+.c-player--playbacking .plv-live-cover,
 .c-player--living .plv-live-cover {
   display: none;
 }

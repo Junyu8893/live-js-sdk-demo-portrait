@@ -29,7 +29,8 @@ class PortraitPlayer extends BaseStore {
           currentTime,
           duration: this.duration,
         });
-      }
+      },
+      ratechange: (rate) => this.trigger(PlayEvents.RATE_CHANGE, { rate }),
     };
   }
 
@@ -155,6 +156,14 @@ class PortraitPlayer extends BaseStore {
     liveSdk.player.switchLevel(definition);
     this.trigger(PlayEvents.LEVEL_CHANGE, { definition });
     this.trigger(PlayEvents.PLAYING);
+  }
+
+  changeRate(rate) {
+    liveSdk.player.setRate(rate);
+    if (this.playerVideo) {
+      this.playerVideo.playbackRate = rate;
+    }
+    this.trigger(PlayEvents.RATE_CHANGE, { rate });
   }
 
   getCurrentTime() {

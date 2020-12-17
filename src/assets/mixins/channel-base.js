@@ -1,3 +1,5 @@
+import { isIOS } from '@utils/browser';
+
 export default {
   inject: {
     portrait: {
@@ -111,6 +113,7 @@ export default {
     multirateEnabled() { return this.playerData?.multirateEnabled; },
     definitions() { return this.playerData?.definitions; },
     currentDefinition() { return this.playerData?.currentDefinition; },
+    currentRate() { return this.playerData.currentRate; },
     playerStatus() { return this.playerData?.playerStatus; },
     streamType() { return this.playerData?.streamType; },
     isPlayed() { return this.playerData?.isPlayed; },
@@ -211,12 +214,23 @@ export default {
     },
 
     /**
+     * 是否显示倍速切换
+     * 1. ios系统
+     * 2. 回放中
+     */
+    setRateVisible() {
+      const rule1 = isIOS();
+      const rule2 = this.isPlaybacking;
+      return rule1 && rule2;
+    },
+
+    /**
      * 播放器菜单栏是否显示(或)
      * 1. 可以设置音视频切换
      * 2. 可以设置多码率
      */
     playerMenuBarVisible() {
-      return this.setPlayModeVisible || this.setMultirateVisible;
+      return this.setPlayModeVisible || this.setMultirateVisible || this.setRateVisible;
     },
 
     // 道具打赏开关
