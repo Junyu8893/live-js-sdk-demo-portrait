@@ -14,7 +14,6 @@ export default {
       const { user } = config;
       // 注册互动功能SDK
       if (window?.PolyvInteractiveSDK?.lottery) {
-        console.log(liveSdk.socket);
         Vue.use(window.PolyvInteractiveSDK.lottery, {
           userInfo: () => {
             return {

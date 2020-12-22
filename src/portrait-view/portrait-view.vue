@@ -187,7 +187,6 @@ export default {
 }
 
 .c-portrait-view__interactive {
-  position: relative;
   z-index: 30;
 }
 </style>
