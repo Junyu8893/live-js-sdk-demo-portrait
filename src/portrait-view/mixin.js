@@ -48,6 +48,9 @@ export default {
   methods: {
     // 处理sdk初始化完成，监听事件
     initSdkEvent() {
+      liveSdk.on(PolyvLiveSdk.EVENTS.CONNECT, () => {
+        this.updateInteractive();
+      });
       liveSdk.on(PolyvLiveSdk.EVENTS.CHANNEL_DATA_INIT, (event, data) => {
         this.channelDetail = data;
         this.getDonateSetting();

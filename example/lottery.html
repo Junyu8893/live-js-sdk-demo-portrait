@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>互动SDK对外提供，抽奖部分demo测试</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://player.polyv.net/jssdk/polyv-chatroom.min.js"></script>
+    <script src="./lottery.min.js"></script>
+    <link rel="stylesheet" href="./lottery.css" >
+  </head>
+  <body>
+    <div id="app">
+      <iar-lottery />
+    </div>
+
+    <script>
+      var appId = 'fj1yxfco1y';
+      var appSecret = '3368101b2257406b9543968d6e958767';
+      var channelId = '1955567';
+      var roomId = '1955567';
+      var channelInfo = {
+        channelId: channelId,
+        roomId: roomId,
+      };
+      var userInfo = {
+        userId: 1,
+        nick: '游客',
+        pic: 'http://livestatic.videocc.net/assets/wimages/missing_face.png',
+        role: 'student',
+      };
+      var chatRoom = null;
+
+      function getSign(obj, appSecret) {
+        var arr = Object.keys(obj).filter(function(item) { return item !== 'sign'; }).sort(); // 拿到除sign外字母顺序排列的key
+        var query = '';
+        arr.forEach((key) => {
+          var value = obj[key];
+          if (typeof value === 'object') {
+            value = JSON.stringify(value);
+          }
+          query += key + value;
+        });
+        return CryptoJS.MD5(appSecret + query + appSecret).toString().toUpperCase();
+      }
+
+      function getChatInfo(success, fail) {
+        var formData = new FormData()
+        var req = new XMLHttpRequest();
+        url = 'http://api.polyv.net/live/v3/channel/common/get-chat-token';
+        var params = {
+          appId: appId,
+          timestamp: Date.now(),
+          channelId: channelInfo.channelId,
+          userId: userInfo.userId,
+          role: userInfo.role,
+        };
+        params.sign = getSign(params, appSecret);
+        for (var key in params) {
+          formData.append(key, params[key]);
+        }
+        req.open("POST", url, true);
+        req.onload = function() {
+          var res = JSON.parse(req.responseText);
+          if (res.code !== 200 || res.status !== 'success') {
+            fail(res);
+          } else {
+            success(res.data);
+          }
+        };
+        req.send(formData);
+      }
+
+      function initChatRoom(token, mediaChannelKey) {
+        var chatroom = new PolyvChatRoom({
+          roomId: channelInfo.roomId,
+          userId: userInfo.userId,
+          nick: userInfo.nick,
+          pic: userInfo.pic,
+          userType: userInfo.role,
+          token: token,
+          mediaChannelKey: mediaChannelKey,
+          version: '2.0',
+        });
+        return chatroom;
+      }
+
+      function init() {
+        if (!appId || !appSecret || !channelId || !roomId) {
+          alert('信息不完整');
+          return;
+        }
+
+        getChatInfo(function(data) {
+          var chatRoom = initChatRoom(data.token, data.mediaChannelKey);
+
+          Vue.use(window.PolyvInteractiveSDK.lottery, {
+            socket: chatRoom.chat.socket,
+            userInfo: function() { return userInfo; },
+            channelInfo: function() { return channelInfo; },
+            delayTime: function() { return 1000; }, // 实际使用时，按照具体延迟设置。默认移动端 8000 ms，pc端 2000ms。
+            locale: function() { return 'zh_CN'; },
+          });
+
+          new Vue({
+            el: '#app',
+          });
+        });
+      }
+
+      init();
+    </script>
+  </body>
+</html>

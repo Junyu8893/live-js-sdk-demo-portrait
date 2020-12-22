@@ -71,12 +71,18 @@
         </swiper-slide>
       </swiper>
     </div>
+
+    <!-- 互动功能加载 -->
+    <div class="c-portrait-view__interactive">
+      <iar-lottery />
+    </div>
   </div>
 </template>
 
 <script>
 import mixin from './mixin';
 import playerControlMixin from './mixins/player-control';
+import InteractiveMixin from './mixins/interactive-mixin';
 import channelBaseMixin from '../assets/mixins/channel-base';
 import { createLiveSdk, destroyLiveSdk } from '../assets/live-sdk/live-sdk';
 import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
@@ -99,7 +105,7 @@ import ChapterList from '../components/ChapterList/ChapterList';
 export default {
   name: 'plv-portrait-view',
 
-  mixins: [channelBaseMixin, mixin, playerControlMixin],
+  mixins: [channelBaseMixin, mixin, playerControlMixin, InteractiveMixin],
 
   data() {
     return {
@@ -130,6 +136,7 @@ export default {
     async initPortrait() {
       await createLiveSdk();
       this.initSdkEvent();
+      this.initInteractive();
     },
   },
 
@@ -177,5 +184,10 @@ export default {
   padding: 0 15px;
   overflow-y: auto;
   max-height: 446px;
+}
+
+.c-portrait-view__interactive {
+  position: relative;
+  z-index: 30;
 }
 </style>
