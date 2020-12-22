@@ -71,7 +71,7 @@ export default {
       this.playerState.multirateEnabled = levels ? 'Y' : 'N';
       if (liveSdk.player.levels) {
         const levelData = ['流畅', '高清', '超清'];
-        this.playerState.definitions = levelData.filter((item, index) => index <= liveSdk.player.levels);
+        this.playerState.definitions = levelData.filter((item, index) => index < liveSdk.player.levels);
         this.playerState.definitions = this.playerState.definitions.map((item, index) => ({ name: item, value: index }));
         this.playerState.currentDefinition = liveSdk.player.level;
       }
