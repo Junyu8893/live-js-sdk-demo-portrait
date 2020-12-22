@@ -116,7 +116,7 @@ class PortraitPlayer extends BaseStore {
     };
     let size = null;
     if (this?.portrait?.isPPT && this?.portrait?.portraitState?.documentSwitch) {
-      size = pptVideoSizeComputed(screenData, videoData);
+      size = pptVideoSizeComputed(videoData);
     } else {
       size = videoSizeComputed(screenData, videoData);
     }

@@ -95,22 +95,39 @@ export const videoSizeComputed = (screenData, videoData) => {
 
 /**
  * video标签尺寸位置计算 - 三分屏
- * @param {Object} screenData 屏幕尺寸
  * @param {Object} videoData 视频流尺寸
  */
-export const pptVideoSizeComputed = (screenData, videoData) => {
-  const { sw = 0, sh = 0 } = screenData;
+export const pptVideoSizeComputed = (videoData) => {
   const { vw = 0, vh = 0 } = videoData;
-  if (!sw || !sh || !vw || !vh) return null;
+  if (!vw || !vh) return null;
+  let sizeData = null;
+  const playerWrap = document.querySelector('#player-container');
+  const { width: sw, height: sh } = playerWrap.getBoundingClientRect();
 
   // 视频宽度占满的等比高度
   const _vh = (vh / vw) * sw;
-  return {
-    width: sw,
-    height: _vh,
+  // 视频高度占满的等比宽度
+  const _vw = (vw / vh) * sh;
+
+  // 等比高度大于容器高度，宽度沾满，上下裁剪
+  if (_vh >= sh) {
+    sizeData = {
+      width: sw,
+      height: _vh,
+      top: (sh - _vh) / 2,
+      left: 0
+    };
+    return sizeData;
+  }
+
+  sizeData = {
+    width: _vw,
+    height: sh,
     top: 0,
-    left: 0
+    left: (sw - _vw) / 2
   };
+
+  return sizeData;
 };
 
 export const imgSizeComputed = (screenData) => {

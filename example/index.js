@@ -5,6 +5,8 @@ new PolyvPortraitWatch({
   el: document.getElementById('portrait-view'),
   appId: 'APP_ID',
   appSecret: 'APP_SECRET',
+  appId: 'fj1yxfco1y',
+  appSecret: '3368101b2257406b9543968d6e958767',
   appId: 'fsp9g50o5j',
   appSecret: 'fcbdb6e6f53a4997bdade93a2c27fc4a',
   channelId: '2055818',
