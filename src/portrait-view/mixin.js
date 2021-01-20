@@ -67,6 +67,8 @@ export default {
       liveSdk.on(PolyvLiveSdk.EVENTS.PLAYBACK_INIT, this.handlePlaybackInit);
       // 监听用户被踢出事件
       liveSdk.on(PolyvLiveSdk.EVENTS.BAN_USER_ROOM, this.handleBanUserRoom);
+      // 监听用户被拒绝登陆
+      liveSdk.on(PolyvLiveSdk.EVENTS.LOGIN_REFUSE, this.handleBanUserRoom);
     },
 
     // 处理聊天室开关事件
