@@ -62,6 +62,7 @@ export default {
         autoplay: true,
         controller: false,
         useH5Page: true,
+        lowLatency: true,
       };
       if (this.isPPT) {
         playerOptions.pptEl = '#doc-container';
@@ -74,12 +75,17 @@ export default {
         }
       }
       liveSdk.setupPlayer(playerOptions);
-      liveSdk.player.on('initOver', () => {
-        this.$emit('player-init');
-      });
-      window.s2j_onPlayerInitOver = () => {
-        this.$emit('player-init');
-      };
+      this.$emit('player-init');
+      // liveSdk.player.on('loadedmetadata', () => {
+      //   console.log('initOver');
+      //   this.$emit('player-init');
+      // });
+      // liveSdk.player.on('initOver', () => {
+      //   console.log('initOver1');
+      // });
+      // window.s2j_onPlayerInitOver = () => {
+      //   console.log('initOver2');
+      // };
     }
   },
 

@@ -69,6 +69,8 @@ export default {
       liveSdk.on(PolyvLiveSdk.EVENTS.BAN_USER_ROOM, this.handleBanUserRoom);
       // 监听用户被拒绝登陆
       liveSdk.on(PolyvLiveSdk.EVENTS.LOGIN_REFUSE, this.handleBanUserRoom);
+      // 监听用户重复登录
+      liveSdk.on(PolyvLiveSdk.EVENTS.RELOGIN, this.handleRelogin);
     },
 
     // 处理聊天室开关事件
@@ -112,6 +114,11 @@ export default {
     handleBanUserRoom(evt) {
       console.info('当前用户被踢出了房间', evt);
       // TODO ....
+    },
+
+    // 处理重复登录
+    handleRelogin(evt, data) {
+      console.info(evt, data);
     }
   }
 };
